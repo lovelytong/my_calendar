@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+    li {
+      display: inline-block;
+      text-align: center;
+      font-size: 18px;
+      width: 100px;
+    }
+    .isToday {
+      background-color: yellow;
+    }
+
+  </style>
+</head>
+<body style="padding-top: 150px;">
+  <div class="container" >
+    <div id="example-1" class="panel panel-default">
+      <div class="panel-heading">
+        <h2>{{year}}年 <small>{{month+1}}月</small></h2>
+      </div>
+      <div class="panel-body" style="height: 260px;position: relative;">
+        <!--日历首行-->
+        <div>
+          <li>MON</li><li>TUE</li><li>WED</li><li>THU</li><li>FRI</li><li>SAT</li><li>SUN</li>
+        </div>
+
+        <!--第一行日期-->
+        <div>
+          <li v-for="k in [...Array(pre).keys()]">-</li><li v-for="l in [...Array(7-pre).keys()]" v-bind:class="{ isToday: (l+1)==monthday && isYearMonth}">{{l + 1}}</li>
+        </div>
+
+        <!--第二行到倒数第二行的日期-->
+        <div v-for="i in rows">
+          <li
+            v-for="j in days"
+            v-bind:class="{ isToday: (i * 7 + j + 8 - pre)==monthday && isYearMonth}"
+          >{{i * 7 + j + 1 + 7 - pre}}</li>
+        </div>
+
+        <!--最后一行日期-->
+        <div>
+          <li v-for="m in lastLine"
+              v-bind:class="{ isToday: (7 * rows.length + 7 - pre + 1 + m)==monthday && isYearMonth }"
+          >{{ 7 * rows.length + 7 - pre + 1 + m}}</li><li
+              v-for="n in [...Array(7 - lastLine.length).keys()]">-</li>
+        </div>
+
+        <!--按钮部分-->
+        <div style="position: absolute;bottom:20px;left:50px;">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-primary" v-on:click="month -= 1" v-if="month > 0">上一月</button><button class="btn btn-primary" v-on:click="month += 1" v-if="month < 11">下一月</button>
+          </div>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-primary" role="button" v-on:click="year -= 1">上一年</button><button class="btn btn-primary" v-on:click="year += 1" >下一年</button>
+          </div>
+        </div>
+
+        <!-- 小猪佩奇 -->
+        <div>
+          <img style="position: absolute;bottom:10px;right:120px;" src="pig.png" alt="" width="230px" height="auto">
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script type="text/javascript">
+  var vm = new Vue({
+    el: '#example-1',
+    data: {
+      days: [...Array(7).keys()],
+      month: new Date().getMonth(),
+      year: new Date().getFullYear()
+    },
+    computed: {
+      monthday: function () {
+        return new Date().getDate()
+      },
+      daysOfMonth: function () {
+        return new Date(this.year, this.month + 1, 0).getDate()
+      },
+      pre: function () {
+        if (new Date(this.year, this.month, 1).getDay() == 0) {
+          return  6;
+        } else {
+          return new Date(this.year, this.month, 1).getDay() - 1
+        }
+
+      },
+      rows: function () {
+        return [...Array(Math.ceil((this.daysOfMonth + this.pre) / 7 ) - 2).keys()]
+      },
+      lastLine: function () {
+        return [...Array(this.daysOfMonth - 7 * this.rows.length - 7 + this.pre).keys()]
+      },
+      isYearMonth: function () {
+        return this.month==new Date().getMonth() && this.year==new Date().getFullYear()
+      }
+    }
+  })
+</script>
+</html>
