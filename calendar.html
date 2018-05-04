@@ -16,6 +16,10 @@
     .isToday {
       background-color: yellow;
     }
+    li:hover {
+      background-color: #E6E6FA;
+      font-weight: bold;
+    }
 
   </style>
 </head>
@@ -33,7 +37,10 @@
 
         <!--第一行日期-->
         <div>
-          <li v-for="k in [...Array(pre).keys()]">-</li><li v-for="l in [...Array(7-pre).keys()]" v-bind:class="{ isToday: (l+1)==monthday && isYearMonth}">{{l + 1}}</li>
+          <li v-for="k in [...Array(pre).keys()]">-</li><li v-for="l in [...Array(7-pre).keys()]"
+           v-bind:class="{ isToday: (l+1)==monthday && isYearMonth}"
+           v-on:click="dateText=String(year)+'/'+String(month)+'/'+String(l + 1)"
+           >{{l + 1}}</li>
         </div>
 
         <!--第二行到倒数第二行的日期-->
@@ -41,6 +48,7 @@
           <li
             v-for="j in days"
             v-bind:class="{ isToday: (i * 7 + j + 8 - pre)==monthday && isYearMonth}"
+            v-on:click="dateText=String(year)+'/'+String(month)+'/'+String(i * 7 + j + 1 + 7 - pre)"
           >{{i * 7 + j + 1 + 7 - pre}}</li>
         </div>
 
@@ -48,6 +56,7 @@
         <div>
           <li v-for="m in lastLine"
               v-bind:class="{ isToday: (7 * rows.length + 7 - pre + 1 + m)==monthday && isYearMonth }"
+              v-on:click="dateText=String(year)+'/'+String(month)+'/'+String(7 * rows.length + 7 - pre + 1 + m)"
           >{{ 7 * rows.length + 7 - pre + 1 + m}}</li><li
               v-for="n in [...Array(7 - lastLine.length).keys()]">-</li>
         </div>
@@ -60,52 +69,55 @@
           <div class="btn-group btn-group-sm">
             <button class="btn btn-primary" role="button" v-on:click="year -= 1">上一年</button><button class="btn btn-primary" v-on:click="year += 1" >下一年</button>
           </div>
+          <input v-model="dateText">
         </div>
+
 
         <!-- 小猪佩奇 -->
         <div>
           <img style="position: absolute;bottom:10px;right:120px;" src="pig.png" alt="" width="230px" height="auto">
         </div>
-
       </div>
     </div>
   </div>
-</body>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-<script type="text/javascript">
-  var vm = new Vue({
-    el: '#example-1',
-    data: {
-      days: [...Array(7).keys()],
-      month: new Date().getMonth(),
-      year: new Date().getFullYear()
-    },
-    computed: {
-      monthday: function () {
-        return new Date().getDate()
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  <script type="text/javascript">
+    var vm = new Vue({
+      el: '#example-1',
+      data: {
+        days: [...Array(7).keys()],
+        month: new Date().getMonth(),
+        year: new Date().getFullYear(),
+        dateText: ""
       },
-      daysOfMonth: function () {
-        return new Date(this.year, this.month + 1, 0).getDate()
-      },
-      pre: function () {
-        if (new Date(this.year, this.month, 1).getDay() == 0) {
-          return  6;
-        } else {
-          return new Date(this.year, this.month, 1).getDay() - 1
-        }
+      computed: {
+        monthday: function () {
+          return new Date().getDate()
+        },
+        daysOfMonth: function () {
+          return new Date(this.year, this.month + 1, 0).getDate()
+        },
+        pre: function () {
+          if (new Date(this.year, this.month, 1).getDay() == 0) {
+            return  6;
+          } else {
+            return new Date(this.year, this.month, 1).getDay() - 1
+          }
 
-      },
-      rows: function () {
-        return [...Array(Math.ceil((this.daysOfMonth + this.pre) / 7 ) - 2).keys()]
-      },
-      lastLine: function () {
-        return [...Array(this.daysOfMonth - 7 * this.rows.length - 7 + this.pre).keys()]
-      },
-      isYearMonth: function () {
-        return this.month==new Date().getMonth() && this.year==new Date().getFullYear()
+        },
+        rows: function () {
+          return [...Array(Math.ceil((this.daysOfMonth + this.pre) / 7 ) - 2).keys()]
+        },
+        lastLine: function () {
+          return [...Array(this.daysOfMonth - 7 * this.rows.length - 7 + this.pre).keys()]
+        },
+        isYearMonth: function () {
+          return this.month==new Date().getMonth() && this.year==new Date().getFullYear()
+        }
       }
-    }
-  })
+    })
 </script>
+</body>
 </html>
