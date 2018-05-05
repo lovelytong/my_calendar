@@ -52,10 +52,12 @@
 
           <!--第一行日期-->
           <div>
-            <li v-for="k in [...Array(pre).keys()]">-</li><li v-for="l in [...Array(7-pre).keys()]"
+            <li
+             v-for="k in [...Array(pre).keys()]">-</li><li
+             v-for="l in [...Array(7-pre).keys()]"
              v-bind:class="{ isToday: (l+1)==monthday && isYearMonth}"
              v-on:click="dateText=String(year)+'/'+String(month+1)+'/'+String(l + 1)"
-             >{{l + 1}}</li>
+            >{{l + 1}}</li>
           </div>
 
           <!--第二行到倒数第二行的日期-->
@@ -69,23 +71,30 @@
 
           <!--最后一行日期-->
           <div>
-            <li v-for="m in lastLine"
-                v-bind:class="{ isToday: (7 * rows.length + 7 - pre + 1 + m)==monthday && isYearMonth }"
-                v-on:click="dateText=String(year)+'/'+String(month+1)+'/'+String(7 * rows.length + 7 - pre + 1 + m)"
-            >{{ 7 * rows.length + 7 - pre + 1 + m}}</li><li
-                v-for="n in [...Array(7 - lastLine.length).keys()]">-</li>
+            <li
+              v-for="m in lastLine"
+              v-bind:class="{ isToday: (7 * rows.length + 7 - pre + 1 + m)==monthday && isYearMonth }"
+              v-on:click="dateText=String(year)+'/'+String(month+1)+'/'+String(7 * rows.length + 7 - pre + 1 + m)">{{ 7 * rows.length + 7 - pre + 1 + m}}</li><li
+              v-for="n in [...Array(7 - lastLine.length).keys()]">-</li>
           </div>
 
           <!--按钮部分-->
           <div style="position: absolute;bottom:20px;left:50px;">
             <div class="btn-group btn-group-sm">
-              <button class="btn btn-primary" v-on:click="month -= 1" v-bind:disabled="month<=0">上一月</button><button class="btn btn-primary" v-on:click="month += 1" v-bind:disabled="month>=11">下一月</button>
+              <button class="btn btn-primary"
+                      v-on:click="month -= 1"
+                      v-bind:disabled="month<=0">上一月</button>
+              <button class="btn btn-primary"
+                      v-on:click="month += 1"
+                      v-bind:disabled="month>=11">下一月</button>
             </div>
             <div class="btn-group btn-group-sm">
-              <button class="btn btn-primary" role="button" v-on:click="year -= 1">上一年</button><button class="btn btn-primary" v-on:click="year += 1" >下一年</button>
+              <button class="btn btn-primary"
+                      v-on:click="year -= 1">上一年</button>
+              <button class="btn btn-primary"
+                      v-on:click="year += 1" >下一年</button>
             </div>
           </div>
-
 
           <!-- 小猪佩奇 -->
           <div>
@@ -102,16 +111,19 @@
     var vm = new Vue({
       el: '#example-1',
       data: {
-        month: 0,
-        year: 0,
-        monthday: 0,
-        dateText: "",
-        show: false
+        month: 0,//当前月份
+        year: 0,//当前年份
+        monthday: 0,//当前日期
+        dateText: "",//输入框中显示的文本
+        show: false//日历面板是否出现
       },
       computed: {
+        //当前月份有多少天
         daysOfMonth: function () {
           return new Date(this.year, this.month + 1, 0).getDate()
         },
+
+        //日历第一行前的空格数
         pre: function () {
           if (new Date(this.year, this.month, 1).getDay() == 0) {
             return  6;
@@ -119,17 +131,25 @@
             return new Date(this.year, this.month, 1).getDay() - 1
           }
         },
+
+        //此数组代表第二行至倒数第二行的行数
         rows: function () {
           return [...Array(Math.ceil((this.daysOfMonth + this.pre) / 7 ) - 2).keys()]
         },
+
+        //此数组代表最后一行剩余多少天
         lastLine: function () {
           return [...Array(this.daysOfMonth - 7 * this.rows.length - 7 + this.pre).keys()]
         },
+
+        //判断某个日期是否高亮时对月份和年份的判断
         isYearMonth: function () {
           return this.month==new Date().getMonth() && this.year==new Date().getFullYear()
         }
       },
+
       created: function () {
+        //实例生成后对data中的变量赋值
         this.month = new Date().getMonth();
         this.year = new Date().getFullYear();
         this.monthday = new Date().getDate();
