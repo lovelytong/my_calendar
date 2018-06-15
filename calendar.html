@@ -26,6 +26,9 @@
     .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
       opacity: 0;
     }
+    div {
+      min-width: 1200px;
+    }
     [v-cloak] {
       display: none;
     }
@@ -79,8 +82,8 @@
           </div>
 
           <!--按钮部分-->
-          <div style="position: absolute;bottom:20px;left:50px;">
-            <div class="btn-group btn-group-sm">
+          <div style="position: absolute;bottom:20px;left:50px;min-width: 0">
+            <div class="btn-group btn-group-sm" style="min-width: 0">
               <button class="btn btn-primary"
                       v-on:click="month -= 1"
                       v-bind:disabled="month<=0">上一月</button>
@@ -88,7 +91,7 @@
                       v-on:click="month += 1"
                       v-bind:disabled="month>=11">下一月</button>
             </div>
-            <div class="btn-group btn-group-sm">
+            <div class="btn-group btn-group-sm" style="min-width: 0">
               <button class="btn btn-primary"
                       v-on:click="year -= 1">上一年</button>
               <button class="btn btn-primary"
