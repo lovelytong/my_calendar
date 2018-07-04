@@ -39,11 +39,11 @@
     <div class="input-group">
       <input v-model="dateText" type="text" class="form-control" style="font-size: 20px;color:#4682B4">
       <span class="input-group-btn">
-          <button class="btn btn-default" type="button" v-on:click = "show = !show">Go!</button>
+          <button class="btn btn-default" type="button" >Go!</button>
       </span>
     </div>
-    <transition name="fade">
-      <div class="panel panel-default" v-show="show">
+    
+      <div class="panel panel-default">
         <div class="panel-heading">
           <h2>{{year}}年 <small>{{month+1}}月</small></h2>
         </div>
@@ -105,9 +105,9 @@
           </div>
         </div>
       </div>
-    </transition>
+    
   </div>
-  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
   <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
   <script type="text/javascript">
